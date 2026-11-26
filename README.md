@@ -84,8 +84,6 @@ The portfolio itself is a small piece of front-end work:
 - **An in-browser demo** of Quiet Ledger's add-an-expense loop, built as part of the page.
 - **Usable by keyboard**, with focus kept inside pop-ups; tested in Chrome on desktop, tablet and phone sizes, and in Safari on iPhone.
 
-Built with React, Vite and three.js. The visual design started in Claude Design and was turned into this React code with Claude Code's help; I directed, reviewed and tested it.
-
 ## Contact
 
 [Email](mailto:tamtingyuen@gmail.com) · [LinkedIn](https://www.linkedin.com/in/johnny-tam-b9374a246/) · [GitHub](https://github.com/Johnny-1211) · [Résumé (PDF)](public/Johnny-Tam-Resume.pdf)
