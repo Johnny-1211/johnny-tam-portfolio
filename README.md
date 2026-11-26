@@ -2,7 +2,7 @@
 
 **Mobile, web & backend.** Two apps designed and built solo — one in Apple App Review, one in TestFlight.
 
-**Live site:** _link coming soon_ · [Résumé (PDF)](public/Johnny-Tam-Resume.pdf) · [LinkedIn](https://www.linkedin.com/in/johnny-tam-b9374a246/) · [Email](mailto:tamtingyuen@gmail.com)
+**Live site: [johnny-tam-portfolio.vercel.app](https://johnny-tam-portfolio.vercel.app)** · [Résumé (PDF)](public/Johnny-Tam-Resume.pdf) · [LinkedIn](https://www.linkedin.com/in/johnny-tam-b9374a246/) · [Email](mailto:tamtingyuen@gmail.com)
 
 ![The opening screen of the portfolio: a 3D Japanese house behind the headline "Software engineer. Two apps, built solo."](docs/preview.jpg)
 
