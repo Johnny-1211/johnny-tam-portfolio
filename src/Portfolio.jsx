@@ -649,6 +649,7 @@ export default class Component extends DCLogic {
       }
       const b = this._qlReturn; if(b && b.isConnected) try { b.focus({ preventScroll: true }); } catch(e){}
       this._qlReturn = null;
+      this._reopenQuick();
     });
     if(!w || this._reduce){ done(); return; }
     if(hs){
@@ -742,6 +743,13 @@ export default class Component extends DCLogic {
       w.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: 'ease-out', fill: 'both' });
       w.querySelectorAll('[data-qv]').forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 460, delay: 60 + i * 55, easing: 'cubic-bezier(.16,.9,.24,1)', fill: 'both' }));
     });
+  }
+  // a case study or demo opened from recruiter mode closes back into it
+  _reopenQuick(){
+    if(!this._backToQuick) return false;
+    this._backToQuick = false;
+    this._openQuick();
+    return true;
   }
   _closeQuick(then){
     if(this.state.rec && !then) this._setRec(false);
@@ -911,6 +919,7 @@ export default class Component extends DCLogic {
       const back = this._returnFocus;
       if(back && back.isConnected) try { back.focus({ preventScroll: true }); } catch(e){ }
       this._returnFocus = null;
+      this._reopenQuick();
     });
     if(!w || this._reduce){ done(); return; }
     const a = w.animate([{ clipPath: 'inset(0px)', opacity: 1 }, { clipPath: this._caseInset(this._caseRect), opacity: 0.2 }], { duration: 470, easing: 'cubic-bezier(.7,0,.3,1)', fill: 'forwards' });
@@ -1722,7 +1731,7 @@ export default class Component extends DCLogic {
     v.qlHome = () => this._qlHome();
     v.deskBeacon = this.deskBeacon; v.openDesk = () => { if(!this._modal()) this._openDemo(false, null); };
     v.projects = v.projects.map(p => Object.assign({}, p, { openDemo: () => this._openDemo(false, 'ledger') }));
-    v.quickProjects = v.projects.map(p => Object.assign({}, p, { open: () => this._closeQuick(() => this._openCase(p.i, null)), openDemoQ: () => this._closeQuick(() => this._openDemo(true, 'ledger')) }));
+    v.quickProjects = v.projects.map(p => Object.assign({}, p, { open: () => this._closeQuick(() => { this._backToQuick = true; this._openCase(p.i, null); }), openDemoQ: () => this._closeQuick(() => { this._backToQuick = true; this._openDemo(true, 'ledger'); }) }));
     v.openDemoNudge = () => this._openDemo(false, null);
     Object.assign(v, this._qlVals());
     return v;
