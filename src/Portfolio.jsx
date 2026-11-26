@@ -202,7 +202,7 @@ export default class Component extends DCLogic {
       if(!this._wide.matches){
         if(this.reel.current) this.reel.current.style.transform = 'none';
         if(this.deepLayer.current) this.deepLayer.current.style.transform = 'none';
-        if(this._dofWas){ this._panels.forEach(p => { p.style.filter = ''; p.style.opacity = ''; p.style.transform = ''; }); this._dofWas = false; }
+        if(this._wideStyled){ this._panels.forEach(p => { p.style.filter = ''; p.style.opacity = ''; p.style.transform = ''; }); this._wideStyled = false; }
         // phones: the house still travels — vertical scroll drives the same camera path
         if(this._panels && this._panels.length){
           const mid = innerHeight * 0.5; let mp = 0;
@@ -261,7 +261,8 @@ export default class Component extends DCLogic {
         this._parked = true;
         this._resolveFocus(live);
       }
-      this._dofWas = dof;
+      // any styling above (moving or parked) must be undone if the window narrows
+      this._wideStyled = true;
       if(!this._hintGone && this._pos > 0.06) this._retireHint();
       const idx = Math.round(this._pos);
       if(idx !== this._active) this._setActive(idx);
