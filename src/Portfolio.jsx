@@ -100,11 +100,19 @@ export default class Component extends DCLogic {
     const wide = window.matchMedia('(min-width:901px)').matches;
     document.querySelectorAll('[data-fit]').forEach(el => {
       el.style.zoom = '';
+      const shots = el.querySelectorAll('[data-g="wframe"]');
+      shots.forEach(f => f.style.removeProperty('height'));
       const p = el.closest('[data-panel]'); if(!p) return;
       p.removeAttribute('data-over');
       if(!wide) return;
       const cs = getComputedStyle(p);
       const avail = p.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      // screenshots can lose height without losing legibility, so they give it up before text is scaled
+      const excess = Math.max(el.offsetHeight, el.scrollHeight) - avail;
+      if(excess > 0){
+        const heights = Array.from(shots, f => f.offsetHeight);
+        shots.forEach((f, i) => f.style.setProperty('height', Math.max(120, heights[i] - excess) + 'px', 'important'));
+      }
       let z = 1;
       for(let k = 0; k < 6; k++){
         const hh = Math.max(el.offsetHeight, el.scrollHeight) * z;
@@ -649,7 +657,7 @@ export default class Component extends DCLogic {
   }
   _qlSave(e){
     if(e && e.preventDefault) e.preventDefault();
-    const a = Math.round(parseFloat(String(this.state.qlAmt).replace(/[^0-9.]/g, '')) * 100) / 100;
+    const a = Math.round(Number(this.state.qlAmt) * 100) / 100;
     if(!(a > 0) || a > 99999){ this.setState({ qlBad: true }); const r = this.qlAmtRef.current; if(r) r.focus(); return; }
     const CAT = { food: 'Food & Dining', transport: 'Transport', other: 'Other', income: 'Salary' };
     const c = this.state.qlCat;
