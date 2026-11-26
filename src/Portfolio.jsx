@@ -17,7 +17,7 @@ export default class Component extends DCLogic {
     this.progressKnob = React.createRef(); this.posNum = React.createRef();
     this.sunCore = React.createRef(); this.skyTint = React.createRef(); this.emberWrap = React.createRef();
     this.cursorRing = React.createRef(); this.cursorDot = React.createRef();
-    this.caseWrap = React.createRef(); this.arcWrap = React.createRef(); this.curtainMark = React.createRef(); this.curtainLine = React.createRef(); this.curtainEnso = React.createRef(); this.curtainBar = React.createRef(); this.curtainSkip = React.createRef();
+    this.caseWrap = React.createRef(); this.curtainMark = React.createRef(); this.curtainLine = React.createRef(); this.curtainEnso = React.createRef(); this.curtainBar = React.createRef(); this.curtainSkip = React.createRef();
     this._tilt = { x: 0, y: 0 }; this._pulse = 0; this._active = -1;
     this.N = 5;
     this.quickWrap = React.createRef(); this.deskBeacon = React.createRef();
@@ -35,7 +35,7 @@ export default class Component extends DCLogic {
     try { const q = new URLSearchParams(location.search).get('view'); if(q === 'recruiter' || location.hash === '#recruiter'){ rec = true; localStorage.setItem('jt_rec', '1'); } else if(q === 'full'){ localStorage.setItem('jt_rec', '0'); } else { const s = localStorage.getItem('jt_rec'); rec = s === '1' || (s === null && (low || narrow)); } } catch(e){}
     this._recBoot = rec;
     this.qlWrap = React.createRef(); this.qlScroll = React.createRef(); this.qlAmtRef = React.createRef();
-    this.state = { sound: false, caseIdx: null, arc: false, arcTag: 'all', quick: rec, rec: rec, live3d: live, sky: sky, sceneGo: false,
+    this.state = { sound: false, caseIdx: null, quick: rec, rec: rec, live3d: live, sky: sky, sceneGo: false,
       ql: false, qlApp: null, qlTab: 'ledger', qlTx: this._qlSeed(), qlSheet: false, qlAmt: '', qlCat: 'food', qlNote: '', qlBad: false, qlToast: '' };
   }
   _initCursor(){
@@ -47,8 +47,8 @@ export default class Component extends DCLogic {
       tx = e.clientX; ty = e.clientY;
       dot.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
       if(!shown){ shown = true; ring.style.opacity = '1'; dot.style.opacity = '1'; }
-      const t = e.target.closest && e.target.closest('[data-case],[data-arcopen],[data-cell],a,button,[data-goto]');
-      let next = t ? (t.hasAttribute('data-case') ? 'View' : t.hasAttribute('data-arcopen') ? 'Index' : '') : null;
+      const t = e.target.closest && e.target.closest('[data-case],[data-cell],a,button,[data-goto]');
+      let next = t ? (t.hasAttribute('data-case') ? 'View' : '') : null;
       if(next === null && this._lanternHot) next = { desk: 'Demo', shelf: 'Skills', letter: 'Write' }[this._hotKind] || '灯';
       if(next === label) return;
       label = next;
@@ -343,7 +343,6 @@ export default class Component extends DCLogic {
     this._key = (e) => {
       if(e.key === 'Escape' && this.state.ql){ if(this.state.qlSheet) this.setState({ qlSheet: false }); else if(this.state.qlApp) this._qlHome(); else this._closeDemo(); return; }
       if(e.key === 'Escape' && this.state.quick){ this._closeQuick(); return; }
-      if(e.key === 'Escape' && this.state.arc){ this._closeArc(); return; }
       if(e.key === 'Escape' && this.state.caseIdx !== null){ this._closeCase(); return; }
       if(e.key === 'Tab' && this._modal()){ this._trap(e); return; }
       if(this._modal()) return;
@@ -472,18 +471,11 @@ export default class Component extends DCLogic {
       if(e.target.closest && e.target.closest('image-slot')) return;
       const oc = e.target.closest && e.target.closest('[data-case]');
       if(oc){ e.preventDefault(); const wrap = oc.closest('[data-anim]'); this._openCase(+oc.getAttribute('data-case'), wrap ? wrap.firstElementChild : null); return; }
-      const ao = e.target.closest && e.target.closest('[data-arcopen]');
-      if(ao){ e.preventDefault(); this._openArc(); return; }
-      const ac = e.target.closest && e.target.closest('[data-arcclose]');
-      if(ac){ e.preventDefault(); this._closeArc(); return; }
-      const at = e.target.closest && e.target.closest('[data-arctag]');
-      if(at){ e.preventDefault(); this.setState({ arcTag: at.getAttribute('data-arctag') }); return; }
       const cc = e.target.closest && e.target.closest('[data-caseclose]');
       if(cc){ e.preventDefault(); this._closeCase(); return; }
       const t = e.target.closest && e.target.closest('[data-goto]');
       if(!t) return;
       e.preventDefault();
-      if(this.state.arc) this._closeArc();
       if(this.state.caseIdx !== null) this._closeCase();
       this._goto(+t.getAttribute('data-goto'));
     };
@@ -552,7 +544,7 @@ export default class Component extends DCLogic {
     try { localStorage.setItem('jt_sky', next); } catch(e){}
     this.setState({ sky: next }, () => this._sky());
   }
-  _modal(){ return this.state.caseIdx !== null || this.state.arc || this.state.quick || this.state.ql; }
+  _modal(){ return this.state.caseIdx !== null || this.state.quick || this.state.ql; }
   _qlSeed(){
     const m = new Date().toLocaleString('en-US', { month: 'short' });
     return [
@@ -729,7 +721,7 @@ export default class Component extends DCLogic {
   _openQuick(){
     this._setRec(true);
     if(this.state.quick) return;
-    if(this.state.caseIdx !== null || this.state.arc) return;
+    if(this.state.caseIdx !== null) return;
     if(this._workClear) this._workClear();
     this._quickReturn = document.activeElement;
     const tr = this.track.current;
@@ -769,7 +761,7 @@ export default class Component extends DCLogic {
   // keep Tab inside the open overlay: the reel behind it is inert, so without this
   // the ring walks out to browser chrome and never comes back
   _trap(e){
-    const w = this.state.ql ? this.qlWrap.current : this.state.quick ? this.quickWrap.current : this.state.arc ? this.arcWrap.current : this.caseWrap.current;
+    const w = this.state.ql ? this.qlWrap.current : this.state.quick ? this.quickWrap.current : this.caseWrap.current;
     if(!w) return;
     const f = Array.prototype.filter.call(
       w.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'),
@@ -794,39 +786,6 @@ export default class Component extends DCLogic {
     h.style.opacity = '0';
     h.style.transform = 'translateX(14px)';
     setTimeout(() => { if(h.isConnected) h.style.display = 'none'; }, 560);
-  }
-  _openArc(){
-    if(this.state.arc) return;
-    if(this._workClear) this._workClear();
-    this._arcReturn = document.activeElement;
-    const tr = this.track.current;
-    if(tr){ tr.setAttribute('inert', ''); tr.inert = true; tr.setAttribute('aria-hidden', 'true'); }
-    this.setState({ arc: true, arcTag: 'all' }, () => {
-      const w = this.arcWrap.current; if(!w) return;
-      const close = w.querySelector('[data-arcclose]');
-      if(close) try { close.focus({ preventScroll: true }); } catch(e){ }
-      if(this.reel.current){ this.reel.current.style.transition = 'filter .6s ease'; this.reel.current.style.filter = 'blur(16px) saturate(0.55)'; }
-      if(this._reduce) return;
-      w.animate([{ clipPath: 'inset(0 0 100% 0)', opacity: 0.5 }, { clipPath: 'inset(0px)', opacity: 1 }], { duration: 560, easing: 'cubic-bezier(.16,.86,.2,1)', fill: 'both' });
-      w.querySelectorAll('[data-arc]').forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: 180 + i * 70, easing: 'cubic-bezier(.16,.9,.24,1)', fill: 'both' }));
-    });
-  }
-  _closeArc(){
-    const w = this.arcWrap.current;
-    if(this.reel.current && this.state.caseIdx === null) this.reel.current.style.filter = '';
-    const done = () => this.setState({ arc: false }, () => {
-      if(this._workClear) this._workClear();
-      if(this.state.caseIdx === null){
-        const tr = this.track.current;
-        if(tr){ tr.removeAttribute('inert'); tr.inert = false; tr.removeAttribute('aria-hidden'); }
-      }
-      const back = this._arcReturn;
-      if(back && back.isConnected) try { back.focus({ preventScroll: true }); } catch(e){ }
-      this._arcReturn = null;
-    });
-    if(!w || this._reduce){ done(); return; }
-    const a = w.animate([{ clipPath: 'inset(0px)', opacity: 1 }, { clipPath: 'inset(0 0 100% 0)', opacity: 0.2 }], { duration: 400, easing: 'cubic-bezier(.7,0,.3,1)', fill: 'forwards' });
-    a.onfinish = done;
   }
   // each room has its own light: cooler in the study, warmest at the lantern
   _mood(i){
@@ -1782,38 +1741,7 @@ export default class Component extends DCLogic {
       }
 
     ];
-    const archive = [
-      { year: '2026', title: 'Commit streak tracker', stack: 'React Native · Node', tag: 'rn', note: 'The side build in Selected work — shipped weekly, changelog kept in public.', href: 'https://github.com/Johnny-1211' },
-      { year: '2026', title: 'Offline queue library', stack: 'TypeScript', tag: 'web', note: 'Retry-with-backoff wrapper pulled out of the capstone app and made standalone.', href: 'https://github.com/Johnny-1211' },
-      { year: '2025', title: 'Recipe scanner', stack: 'Swift · VisionKit', tag: 'ios', note: 'Weekend build: OCR a printed recipe into a structured shopping list.', href: 'https://github.com/Johnny-1211' },
-      { year: '2025', title: 'Transit widget', stack: 'SwiftUI · WidgetKit', tag: 'ios', note: 'Home-screen countdown to the next bus. Taught me how little a widget may do.', href: 'https://github.com/Johnny-1211' },
-      { year: '2025', title: 'Budget splitter', stack: 'Kotlin · Compose', tag: 'android', note: 'Shared-expense maths with an offline ledger and no accounts.', href: 'https://github.com/Johnny-1211' },
-      { year: '2024', title: 'Capstone app', stack: 'Swift · SwiftUI · Firebase', tag: 'ios', note: 'Full build, brief to submission — the first case study.', href: 'https://github.com/Johnny-1211' },
-      { year: '2024', title: 'Study-group scheduler', stack: 'React · Node · SQL', tag: 'web', note: 'Coursework: availability overlap solver behind a plain table UI.', href: 'https://github.com/Johnny-1211' },
-      { year: '2024', title: 'Portfolio site', stack: 'HTML · CSS · JS', tag: 'web', note: 'This site. Hand-built, no framework, animation written by hand.', href: '#' },
-      { year: '2023', title: 'Honours project', stack: 'Java · Android · REST', tag: 'android', note: 'Final-year capstone assessed on architecture — the second case study.', href: 'https://github.com/Johnny-1211' },
-      { year: '2023', title: 'Sensor logger', stack: 'Kotlin · Room', tag: 'android', note: 'Background accelerometer capture into a local database. Battery was the real problem.', href: 'https://github.com/Johnny-1211' },
-      { year: '2023', title: 'Algorithms notebook', stack: 'Python', tag: 'other', note: 'Sorting, graphs and dynamic programming worked through by hand, then tested.', href: 'https://github.com/Johnny-1211' },
-      { year: '2022', title: 'Campus map', stack: 'Java · Android', tag: 'android', note: 'Coursework: indoor routing over a hand-digitised floor plan.', href: 'https://github.com/Johnny-1211' },
-      { year: '2022', title: 'Ticketing REST API', stack: 'Node · Express · SQL', tag: 'web', note: 'First backend I designed rather than followed a tutorial into.', href: 'https://github.com/Johnny-1211' },
-      { year: '2021', title: 'Terminal games', stack: 'C++', tag: 'other', note: 'Where it started — Snake and Minesweeper in a console window.', href: 'https://github.com/Johnny-1211' }
-    ];
-    const tagDefs = [['all','All'],['ios','iOS'],['android','Android'],['rn','React Native'],['web','Web'],['other','Other']];
-    const active = this.state.arcTag;
-    const arcRows = archive.filter(r => active === 'all' || r.tag === active);
     return {
-      arcWrap: this.arcWrap,
-      arcOpen: this.state.arc,
-      arcTotal: archive.length,
-      arcShown: arcRows.length + (arcRows.length === 1 ? ' entry' : ' entries'),
-      arcRows: arcRows,
-      arcTags: tagDefs.map(([key, label]) => ({
-        key: key, label: label,
-        count: key === 'all' ? archive.length : archive.filter(r => r.tag === key).length,
-        bg: key === active ? 'rgba(183,48,31,0.9)' : 'rgba(243,236,221,0.05)',
-        fg: key === active ? '#F5F0E3' : 'rgba(243,236,221,0.66)',
-        bd: key === active ? '#B7301F' : 'rgba(243,236,221,0.22)'
-      })).filter(t => t.count > 0),
       soundOn: this.state.sound,
       soundLabel: this.state.sound ? 'Sound · On' : 'Sound · Off',
       soundDot: this.state.sound ? '#E0674F' : 'rgba(243,236,221,0.3)',
