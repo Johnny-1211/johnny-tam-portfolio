@@ -87,8 +87,8 @@ export default class Component extends DCLogic {
     addEventListener('pointermove', e => { this._lastPE = e; }, {passive:true});
     const leave = () => { shown = false; ring.style.opacity = '0'; dot.style.opacity = '0'; };
     addEventListener('pointermove', move, {passive:true});
-    document.addEventListener('pointerleave', leave);
-    this._cursorOff = () => { removeEventListener('pointermove', move); document.removeEventListener('pointerleave', leave); cancelAnimationFrame(this._craf); };
+    document.documentElement.addEventListener('pointerleave', leave);
+    this._cursorOff = () => { removeEventListener('pointermove', move); document.documentElement.removeEventListener('pointerleave', leave); cancelAnimationFrame(this._craf); };
     const tick = () => { rx += (tx - rx) * 0.16; ry += (ty - ry) * 0.16; ring.style.transform = 'translate3d(' + rx.toFixed(2) + 'px,' + ry.toFixed(2) + 'px,0)'; this._craf = (Math.abs(tx - rx) + Math.abs(ty - ry) > 0.05) ? requestAnimationFrame(tick) : null; };
     const wakeRing = () => { if(!this._craf) this._craf = requestAnimationFrame(tick); };
     addEventListener('pointermove', wakeRing, {passive:true});
@@ -212,6 +212,8 @@ export default class Component extends DCLogic {
           }
           mp = Math.max(0, Math.min(this.N - 1, mp));
           if(this._mobPos == null || Math.abs(mp - this._mobPos) > 0.002){ this._mobPos = mp; window.dispatchEvent(new CustomEvent('ronin:pos', { detail: { pos: mp } })); }
+          const live = Math.round(mp);
+          if(this._setActive && live !== this._active) this._setActive(live);
         }
         return;
       }

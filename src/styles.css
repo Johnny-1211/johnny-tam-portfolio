@@ -79,7 +79,7 @@ html[data-sky="night"] .em:nth-child(2n){bottom:34vh;animation-duration:19s !imp
 @media (max-width:900px){
   [data-g="track"]{height:auto !important}
   [data-g="stage"]{position:static !important;height:auto !important;overflow:visible !important}
-  [data-g="reel"]{position:static !important;flex-direction:column !important;width:100% !important;transform:none !important;height:auto !important}
+  [data-g="reel"]{position:relative !important;flex-direction:column !important;width:100% !important;transform:none !important;height:auto !important}
   [data-g="panel"]{width:100% !important;min-height:100vh;height:auto !important;padding:118px 22px 96px !important}
   [data-g="deep"]{position:sticky !important;inset:auto !important;top:0;left:0;right:0;height:100vh;opacity:0.42}
   [data-g="hdr"]{position:sticky !important}
@@ -163,7 +163,13 @@ html[data-sky="night"] .em:nth-child(2n){bottom:34vh;animation-duration:19s !imp
   [data-g="onow"]>div:nth-child(2){display:none !important}
 }
 @media (max-width:900px){
-  [data-g="onow"]{display:flex !important;position:static !important;transform:none !important;max-width:none !important;margin-top:26px}
+  [data-g="onow"]{display:flex !important;position:static !important;transform:none !important;max-width:none !important;margin-top:26px;flex:1 0 100%;order:2}
+  [data-chapter="0"][data-g="panel"]{flex-wrap:wrap !important;align-content:center}
+  [data-g="hire"]{display:inline-flex;align-items:center}
+  /* the sideways-travel hint belongs to the desktop reel */
+  [data-g="ohint"]{display:none !important}
+  /* panels lose their wide left gutter here, so the vertical chapter mark would sit on the text */
+  [data-g="markv"]{display:none !important}
 }
 /* short windows: the ledger compresses, it never disappears */
 @media (max-height:700px){
