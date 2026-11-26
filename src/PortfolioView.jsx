@@ -565,12 +565,12 @@ export default function PortfolioView(v) {
                               {p?.demo ? (
                                 <>
                                   <button type="button" onClick={p?.openDemo} aria-haspopup="dialog" style={{"flex":"1 1 0","minWidth":"0","justifyContent":"center","display":"flex","alignItems":"center","gap":"6px","minHeight":"36px","padding":"0 8px","whiteSpace":"nowrap","border":"1px solid rgba(243,236,221,0.6)","background":"rgba(243,236,221,0.12)","cursor":"pointer","fontFamily":"'JetBrains Mono',monospace","fontSize":"9.5px","letterSpacing":"0.08em","textTransform":"uppercase","color":"#F3ECDD"}} className="scp7">
-                                    ▶ Demo
+                                    ▶︎ Demo
                                   </button>
                                 </>
                               ) : null}
                               <a href={p?.repo} target="_blank" rel="noopener" aria-label={(p?.title ?? '') + " on GitHub"} style={{"flex":"1 1 0","minWidth":"0","justifyContent":"center","display":"flex","alignItems":"center","gap":"6px","background":"rgba(11,9,6,0.55)","minHeight":"36px","padding":"0 10px","whiteSpace":"nowrap","border":"1px solid rgba(243,236,221,0.3)","fontFamily":"'JetBrains Mono',monospace","fontSize":"9.5px","letterSpacing":"0.1em","textTransform":"uppercase","color":"rgba(243,236,221,0.85)"}} className="scp0">
-                                GitHub ↗
+                                GitHub ↗︎
                               </a>
                             </div>
                             <button type="button" data-case={p?.i} aria-haspopup="dialog" style={{"marginTop":"auto","display":"flex","alignItems":"center","justifyContent":"space-between","gap":"10px","width":"100%","background":"transparent","border":"none","borderTop":"1px solid rgba(243,236,221,0.18)","padding":"11px 0 0","cursor":"pointer","fontFamily":"'JetBrains Mono',monospace","fontSize":"9.5px","letterSpacing":"0.16em","textTransform":"uppercase","color":"rgba(243,236,221,0.9)","textShadow":"0 1px 6px rgba(11,9,6,0.95),0 0 2px rgba(11,9,6,0.9)","transition":"color .3s ease,border-color .3s ease"}} className="scp8">
@@ -787,7 +787,7 @@ export default function PortfolioView(v) {
                       <Fragment key={i}>
                         <a href={l?.href} target="_blank" rel="noopener" style={{"color":"rgba(243,236,221,0.8)"}} className="scp1">
                           {text(l?.label)}
-                          {" ↗"}
+                          {" ↗︎"}
                         </a>
                       </Fragment>
                     ))}
@@ -900,7 +900,7 @@ export default function PortfolioView(v) {
                                     {text(d?.line)}
                                   </span>
                                   <span style={{"display":"flex","alignItems":"center","gap":"8px","marginTop":"4px","fontFamily":"'JetBrains Mono',monospace","fontSize":"11px","letterSpacing":"0.14em","textTransform":"uppercase","color":"#A9D6CB"}}>
-                                    ▶ Run demo
+                                    ▶︎ Run demo
                                   </span>
                                 </span>
                               </button>
@@ -1781,10 +1781,10 @@ export default function PortfolioView(v) {
                     Email
                   </a>
                   <a href="https://github.com/Johnny-1211" target="_blank" rel="noopener" style={{"display":"inline-flex","alignItems":"center","minHeight":"48px","border":"1px solid rgba(243,236,221,0.34)","padding":"0 20px","fontSize":"14px","color":"#F3ECDD"}} className="scp5">
-                    GitHub ↗
+                    GitHub ↗︎
                   </a>
                   <a href="https://www.linkedin.com/in/johnny-tam-b9374a246/" target="_blank" rel="noopener" style={{"display":"inline-flex","alignItems":"center","minHeight":"48px","border":"1px solid rgba(243,236,221,0.34)","padding":"0 20px","fontSize":"14px","color":"#F3ECDD"}} className="scp5">
-                    LinkedIn ↗
+                    LinkedIn ↗︎
                   </a>
                 </div>
                 <div data-qv="" style={{"display":"flex","flexDirection":"column","gap":"14px"}}>
@@ -1829,7 +1829,7 @@ export default function PortfolioView(v) {
                             {p?.demo ? (
                               <>
                                 <button type="button" onClick={p?.openDemoQ} style={{"alignSelf":"flex-start","display":"flex","alignItems":"center","gap":"8px","minHeight":"40px","padding":"0 12px","border":"1px solid rgba(131,190,176,0.6)","background":"rgba(131,190,176,0.12)","cursor":"pointer","fontFamily":"'JetBrains Mono',monospace","fontSize":"11px","letterSpacing":"0.14em","textTransform":"uppercase","color":"#A9D6CB"}} className="scpg">
-                                  ▶ Try it live
+                                  ▶︎ Try it live
                                 </button>
                               </>
                             ) : null}
@@ -1919,7 +1919,7 @@ export default function PortfolioView(v) {
                         {text(r?.note)}
                       </span>
                       <span style={{"fontFamily":"'JetBrains Mono',monospace","fontSize":"13px","color":"rgba(243,236,221,0.66)","textAlign":"right"}}>
-                        ↗
+                        ↗︎
                       </span>
                     </a>
                     {' '}
@@ -2122,7 +2122,7 @@ export default function PortfolioView(v) {
                   <Fragment key={i}>
                     <a href={k?.href} target="_blank" rel="noopener" style={{"color":"rgba(243,236,221,0.74)"}} className="scp1">
                       {text(k?.label)}
-                      {" ↗"}
+                      {" ↗︎"}
                     </a>
                   </Fragment>
                 ))}

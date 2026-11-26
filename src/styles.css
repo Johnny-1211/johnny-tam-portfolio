@@ -171,6 +171,11 @@ html[data-sky="night"] .em:nth-child(2n){bottom:34vh;animation-duration:19s !imp
   [data-g="ohint"]{display:none !important}
   /* panels lose their wide left gutter here, so the vertical chapter mark would sit on the text */
   [data-g="markv"]{display:none !important}
+  /* the case study scrolls as one page, not as a short box under the fixed screenshot */
+  [data-g="case"] [data-g="csgrid"]{display:flex !important;flex-direction:column}
+  [data-g="case"] [data-g="csgrid"]>*{flex:none !important}
+  [data-g="case"] [data-csscroll]{overflow:visible !important;min-height:auto !important;padding-right:0 !important}
+  [data-g="case"] [data-cshint]{display:none !important}
 }
 /* short windows: the ledger compresses, it never disappears */
 @media (max-height:700px){
