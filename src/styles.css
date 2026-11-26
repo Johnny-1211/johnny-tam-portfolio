@@ -81,7 +81,8 @@ html[data-sky="night"] .em:nth-child(2n){bottom:34vh;animation-duration:19s !imp
   [data-g="stage"]{position:static !important;height:auto !important;overflow:visible !important}
   [data-g="reel"]{position:relative !important;flex-direction:column !important;width:100% !important;transform:none !important;height:auto !important}
   [data-g="panel"]{width:100% !important;min-height:100vh;height:auto !important;padding:118px 22px 96px !important}
-  [data-g="deep"]{position:sticky !important;inset:auto !important;top:0;left:0;right:0;height:100vh;opacity:0.42}
+  /* pinned behind the content like the 3D house; as a sticky block it took a whole empty screen above the headline */
+  [data-g="deep"]{position:fixed !important;inset:0 !important;height:100vh;opacity:0.42}
   [data-g="hdr"]{position:sticky !important}
   [data-g="filmstrip"]{display:none !important}
   [data-g="hnav"]{display:none !important}
