@@ -121,6 +121,10 @@ html[data-sky="night"] .em:nth-child(2n){bottom:34vh;animation-duration:19s !imp
   [data-g="brand"]{flex-direction:column !important;align-items:flex-start !important;gap:3px !important;line-height:1.2;white-space:nowrap}
   [data-g="brand"]>span{letter-spacing:0.12em !important}
 }
+/* the contact email and its Copy button need ~340px; let Copy drop below on narrower phones */
+@media (max-width:379px){
+  [data-panel] div:has(> a[href^="mailto"]):has(> button){flex-wrap:wrap;row-gap:8px}
+}
 @media (max-width:359px){
   [data-g="brand"]{font-size:15px !important}
   [data-g="brand"]>span{letter-spacing:0.06em !important}
