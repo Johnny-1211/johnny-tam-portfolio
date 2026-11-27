@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0B0906"/>
+  <g transform="translate(32 32) scale(0.86) translate(-32 -32)" fill="#F3ECDD" stroke="#F3ECDD">
+    <circle cx="32" cy="32" r="30.2" fill="none" stroke-width="2.4"/>
+    <circle cx="32" cy="32" r="24" fill="none" stroke-width="1.01" opacity="0.55"/>
+    <g stroke="none">
+      <path d="M32,9 Q38.6,21 32,30.6 Q25.4,21 32,9 Z"/>
+      <path d="M32,9 Q38.6,21 32,30.6 Q25.4,21 32,9 Z" transform="rotate(90 32 32)"/>
+      <path d="M32,9 Q38.6,21 32,30.6 Q25.4,21 32,9 Z" transform="rotate(180 32 32)"/>
+      <path d="M32,9 Q38.6,21 32,30.6 Q25.4,21 32,9 Z" transform="rotate(270 32 32)"/>
+      <circle cx="32" cy="32" r="3.3"/>
+    </g>
+  </g>
+</svg>
