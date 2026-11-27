@@ -128,6 +128,8 @@ export default class Component extends DCLogic {
     this._initCursor();
     // v10 wheel-driven horizontal travel engine
     this._wide = matchMedia('(min-width:901px)');
+    // layout the chapter tracking belongs to; flips only in the width-change handler below
+    this._wideMode = this._wide.matches;
     this._reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this._panels = Array.from(document.querySelectorAll('[data-panel]'));
 
@@ -213,7 +215,7 @@ export default class Component extends DCLogic {
           mp = Math.max(0, Math.min(this.N - 1, mp));
           if(this._mobPos == null || Math.abs(mp - this._mobPos) > 0.002){ this._mobPos = mp; window.dispatchEvent(new CustomEvent('ronin:pos', { detail: { pos: mp } })); }
           const live = Math.round(mp);
-          if(this._setActive && live !== this._active) this._setActive(live);
+          if(this._setActive && !this._wideMode && live !== this._active) this._setActive(live);
         }
         return;
       }
@@ -265,7 +267,7 @@ export default class Component extends DCLogic {
       this._wideStyled = true;
       if(!this._hintGone && this._pos > 0.06) this._retireHint();
       const idx = Math.round(this._pos);
-      if(idx !== this._active) this._setActive(idx);
+      if(this._wideMode && idx !== this._active) this._setActive(idx);
     };
     this._travel = this._apply;
     // Two travel modes, on purpose: direct manipulation (wheel/drag) follows the finger
@@ -379,7 +381,15 @@ export default class Component extends DCLogic {
     this._fit(); setTimeout(() => this._fit(), 400); setTimeout(() => this._fit(), 1800); setTimeout(() => this._fit(), 3200); setTimeout(() => this._fit(), 5000);
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => this._fit());
     window.addEventListener('resize', this._onResize);
-    this._wide.addEventListener('change', () => { this._parked = false; this._apply(); this._setActive(Math.round(this._target)); });
+    // crossing the 900px line (e.g. rotating an iPad) keeps the chapter being read:
+    // phone scrolling tracks _active but never moves the desktop reel's _target
+    this._wide.addEventListener('change', () => {
+      const keep = this._active >= 0 ? this._active : Math.round(this._target);
+      this._wideMode = this._wide.matches;
+      this._tw = null; this._pos = this._target = keep; this._parked = false;
+      this._apply(); this._setActive(keep);
+      if(!this._wide.matches && this._panels[keep]) this._panels[keep].scrollIntoView({ block: 'start' });
+    });
     this._stageEl = stage;
 
     const ho = this.props.heroObject || 'none';
