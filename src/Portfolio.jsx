@@ -1143,7 +1143,10 @@ export default class Component extends DCLogic {
       return;
     }
     const go = () => { this._pendingFocus = i; this._toEased(i, this._reduce ? 0 : 62); };
-    if(i === this._active || this._shojiBusy) return;
+    // a jump asked for mid-transition is kept (latest wins) and run once the doors finish
+    if(this._shojiBusy){ this._queuedGoto = i; return; }
+    this._queuedGoto = null;
+    if(i === this._active) return;
     // every chapter jump goes through the shoji; only leaving the opening also leans the camera in
     this._shojiPush = this._active === 0;
     this._shoji(go, i);
@@ -1181,7 +1184,11 @@ export default class Component extends DCLogic {
     o.style.display = 'block';
     if(this._shojiPush !== false) window.dispatchEvent(new CustomEvent('ronin:push'));
     this._shojiBusy = true;
-    setTimeout(() => { this._shojiBusy = false; }, this._shojiN > 0 ? 1300 : 2300);
+    setTimeout(() => {
+      this._shojiBusy = false;
+      const next = this._queuedGoto; this._queuedGoto = null;
+      if(next != null && !this._modal()) this._goto(next);
+    }, this._shojiN > 0 ? 1300 : 2300);
     if(this.state.sound) { try { this._flute(); } catch(e){} }
     this._shojiN = (this._shojiN || 0) + 1;
     const q = this._shojiN > 1 ? 0.55 : 1, tS = Math.round(720 * q), tH = Math.round(560 * q), tP = Math.round(1000 * q), tL = Math.round(860 * q);
